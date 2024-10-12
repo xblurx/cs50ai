@@ -1,5 +1,5 @@
 # ai-cs50
-The ai course by https://cs50.harvard.edu/ai/2024
+My work on CS50’s Introduction to AI with Python https://cs50.harvard.edu/ai/2024
 
 Topics described as weeks include:
 - Search (week0)
