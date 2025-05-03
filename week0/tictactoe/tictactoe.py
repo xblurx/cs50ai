@@ -46,14 +46,7 @@ def result(board, action):
     """
     Returns the board that results from making move (i, j) on the board.
     """
-    if (
-        action is None
-        or action[0] < 0
-        or action[1] < 0
-        or action[0] >= len(board)
-        or action[1] >= len(board[0])
-        or board[action[0]][action[1]] is not EMPTY
-    ):
+    if action not in actions(board):
         raise ValueError(f"Invalid action: {action}")
 
     row, col = action
@@ -104,60 +97,48 @@ def utility(board):
         case None:
             return 0
 
-    print("called utility with no terminal state")
     return None
 
 
-def min_value(state):
+def minmax(state, is_max_player, alpha, beta):
+    move = None
+
     if terminal(state):
-        return utility(state)
+        return utility(state), move
 
-    v = inf
+    if is_max_player:
+        v = -inf
 
-    for action in actions(state):
-        v = min(v, max_value(result(state, action)))
+        for action in actions(state):
+            new_v, _ = minmax(result(state, action), False, alpha, beta)
+            if new_v > v:
+                v = new_v
+                move = action
 
-    return v
+            alpha = max(v, alpha)
 
+            # prune
+            if beta <= alpha:
+                break
 
-def min_action(state):
-    v = inf
-    a = None
+        return v, move
 
-    for action in actions(state):
-        prev_v = v
-        v = min(v, max_value(result(state, action)))
+    else:
+        v = inf
 
-        if prev_v != v:
-            a = action
+        for action in actions(state):
+            new_v, _ = minmax(result(state, action), True, alpha, beta)
+            if new_v < v:
+                v = new_v
+                move = action
 
-    return a
+            beta = min(v, beta)
 
+            # prune
+            if beta <= alpha:
+                break
 
-def max_value(state):
-    if terminal(state):
-        return utility(state)
-
-    v = -inf
-
-    for action in actions(state):
-        v = max(v, min_value(result(state, action)))
-
-    return v
-
-
-def max_action(state):
-    v = -inf
-    a = None
-
-    for action in actions(state):
-        prev_v = v
-        v = max(v, min_value(result(state, action)))
-
-        if prev_v != v:
-            a = action
-
-    return a
+        return v, move
 
 
 def minimax(board):
@@ -173,6 +154,7 @@ def minimax(board):
         case "X":
             if all([row.count(EMPTY) == 3 for row in board]):
                 return (1, 1)
-            return max_action(board)
+
+            return minmax(board, True, -inf, inf)[1]
         case "O":
-            return min_action(board)
+            return minmax(board, False, -inf, inf)[1]

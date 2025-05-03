@@ -1,0 +1,166 @@
+No known safe moves, AI making random move.
+move: (0, 0)
+adding sentence: {(0, 1), (1, 0), (1, 1)} = 0
+concluded: safes: {(0, 1), (1, 0), (1, 1)}
+safes before: [(0, 0)]
+safes after: [(0, 0), (0, 1), (1, 0), (1, 1)]
+safes added: [(0, 1), (1, 0), (1, 1)]
+mines before: []
+mines after: []
+mines added: []
+knowledge before:
+{(0, 1), (1, 0), (1, 1)} = 0
+knowledge after:
+
+
+AI making safe move.
+move: (0, 1)
+adding sentence: {(0, 2), (1, 2)} = 0
+concluded: safes: {(0, 2), (1, 2)}
+safes before: [(0, 0), (0, 1), (1, 0), (1, 1)]
+safes after: [(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2)]
+safes added: [(0, 2), (1, 2)]
+mines before: []
+mines after: []
+mines added: []
+knowledge before:
+{(0, 2), (1, 2)} = 0
+knowledge after:
+
+
+AI making safe move.
+move: (1, 2)
+adding sentence: {(2, 3), (2, 1), (2, 2), (0, 3), (1, 3)} = 1
+safes before: [(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2)]
+safes after: [(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2)]
+safes added: []
+mines before: []
+mines after: []
+mines added: []
+knowledge before:
+{(2, 1), (0, 3), (2, 3), (2, 2), (1, 3)} = 1
+knowledge after:
+{(2, 3), (2, 1), (2, 2), (0, 3), (1, 3)} = 1
+
+
+AI making safe move.
+move: (1, 1)
+adding sentence: {(2, 0), (2, 1), (2, 2)} = 2
+safes before: [(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2)]
+safes after: [(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2)]
+safes added: []
+mines before: []
+mines after: []
+mines added: []
+knowledge before:
+{(2, 0), (2, 1), (2, 2)} = 2
+{(2, 1), (0, 3), (2, 3), (2, 2), (1, 3)} = 1
+knowledge after:
+{(2, 0), (2, 1), (2, 2)} = 2
+{(2, 3), (2, 1), (2, 2), (0, 3), (1, 3)} = 1
+
+AI making safe move.
+move: (0, 2)
+adding sentence: {(0, 3), (1, 3)} = 0
+concluded: safes: {(0, 3), (1, 3)}
+safes before: [(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2)]
+safes after: [(0, 0), (0, 1), (0, 2), (0, 3), (1, 0), (1, 1), (1, 2), (1, 3)]            safes added: [(0, 3), (1, 3)]
+mines before: []                                                                         mines after: []
+mines added: []
+knowledge before:                                                                        {(0, 3), (1, 3)} = 0
+{(2, 0), (2, 1), (2, 2)} = 2
+{(2, 1), (0, 3), (2, 3), (2, 2), (1, 3)} = 1
+knowledge after:
+{(2, 0), (2, 1), (2, 2)} = 2
+{(2, 3), (2, 1), (2, 2)} = 1
+
+
+AI making safe move.
+move: (0, 3)
+adding sentence: {(0, 4), (1, 4)} = 0                                                    concluded: safes: {(0, 4), (1, 4)}                                                       safes before: [(0, 0), (0, 1), (0, 2), (0, 3), (1, 0), (1, 1), (1, 2), (1, 3)]           safes after: [(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (1, 0), (1, 1), (1, 2), (1, 3), (1, 4)]
+safes added: [(0, 4), (1, 4)]
+mines before: []
+mines after: []
+mines added: []                                                                          knowledge before:
+{(0, 4), (1, 4)} = 0
+{(2, 0), (2, 1), (2, 2)} = 2
+{(2, 3), (2, 1), (2, 2)} = 1
+knowledge after:
+{(2, 0), (2, 1), (2, 2)} = 2
+{(2, 3), (2, 1), (2, 2)} = 1
+
+
+AI making safe move.                                                                     move: (0, 4)
+adding sentence: {(0, 5), (1, 5)} = 1                                                    safes before: [(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (1, 0), (1, 1), (1, 2), (1, 3), (1, 4)]
+safes after: [(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (1, 0), (1, 1), (1, 2), (1, 3), (1, 4)]
+safes added: []
+mines before: []
+mines after: []
+mines added: []
+knowledge before:
+{(0, 5), (1, 5)} = 1
+{(2, 0), (2, 1), (2, 2)} = 2
+{(2, 3), (2, 1), (2, 2)} = 1
+knowledge after:
+{(0, 5), (1, 5)} = 1
+{(2, 0), (2, 1), (2, 2)} = 2                                                             {(2, 3), (2, 1), (2, 2)} = 1
+                                                                                         AI making safe move.                                                                     move: (1, 4)
+adding sentence: {(2, 3), (2, 4), (0, 5), (1, 5), (2, 5)} = 1
+knowledge before inference:
+{(0, 5), (1, 5)} = 1
+{(2, 0), (2, 1), (2, 2)} = 2
+{(2, 3), (2, 1), (2, 2)} = 1                                                             {(2, 4), (1, 5), (2, 3), (0, 5), (2, 5)} = 1
+inferred from knowledge:
+{(2, 3), (2, 4), (2, 5)} = 0
+concluded: safes: {(2, 3), (2, 4), (2, 5)}
+knowledge before inference:
+{(0, 5), (1, 5)} = 1
+{(2, 0), (2, 1), (2, 2)} = 2
+{(2, 3), (2, 1), (2, 2)} = 1
+{(2, 4), (1, 5), (2, 3), (0, 5), (2, 5)} = 1                                             {(2, 3), (2, 4), (2, 5)} = 0                                                             inferred from knowledge:
+{(2, 0)} = 1                                                                             concluded: mines: {(2, 0)}                                                               safes before: [(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (1, 0), (1, 1), (1, 2), (1, 3), (1, 4)]                                                                                    safes after: [(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (2, 3), (2, 4), (2, 5)]                                                             safes added: [(2, 3), (2, 4), (2, 5)]
+mines before: []
+mines after: [(2, 0)]
+mines added: [(2, 0)]
+knowledge before:
+{(0, 5), (1, 5)} = 1
+{(2, 0), (2, 1), (2, 2)} = 2
+{(2, 3), (2, 1), (2, 2)} = 1
+{(2, 4), (1, 5), (2, 3), (0, 5), (2, 5)} = 1
+knowledge after:                                                                         {(0, 5), (1, 5)} = 1                                                                     {(2, 1), (2, 2)} = 1                                                                                                                                                                                                                                                       AI making safe move.
+move: (2, 4)
+adding sentence: {(3, 3), (3, 4), (3, 5), (1, 5)} = 1
+safes before: [(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (2, 3), (2, 4), (2, 5)]                                                            safes after: [(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (2, 3), (2, 4), (2, 5)]                                                             safes added: []
+mines before: [(2, 0)]                                                                   mines after: [(2, 0)]
+mines added: []
+knowledge before:
+{(0, 5), (1, 5)} = 1
+{(2, 1), (2, 2)} = 1                                                                     {(3, 3), (3, 4), (3, 5), (1, 5)} = 1                                                     knowledge after:
+{(0, 5), (1, 5)} = 1                                                                     {(2, 1), (2, 2)} = 1                                                                     {(3, 3), (3, 4), (3, 5), (1, 5)} = 1
+
+AI making safe move.
+move: (2, 3)
+adding sentence: {(3, 2), (3, 3), (3, 4), (2, 2)} = 1
+safes before: [(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (2, 3), (2, 4), (2, 5)]                                                            safes after: [(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (2, 3), (2, 4), (2, 5)]
+safes added: []
+mines before: [(2, 0)]
+mines after: [(2, 0)]
+mines added: []                                                                          knowledge before:                                                                        {(0, 5), (1, 5)} = 1                                                                     {(2, 1), (2, 2)} = 1
+{(3, 3), (3, 4), (3, 5), (1, 5)} = 1                                                     {(3, 2), (3, 3), (3, 4), (2, 2)} = 1                                                     knowledge after:
+{(0, 5), (1, 5)} = 1                                                                     {(2, 1), (2, 2)} = 1                                                                     {(3, 3), (3, 4), (3, 5), (1, 5)} = 1
+{(3, 2), (3, 3), (3, 4), (2, 2)} = 1
+
+
+AI making safe move.
+move: (1, 0)
+adding sentence: {(2, 1)} = 1                                                            concluded: mines: {(2, 1)}                                                               concluded: safes: {(2, 2)}
+safes before: [(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (2, 3), (2, 4), (2, 5)]
+safes after: [(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (2, 2), (2, 3), (2, 4), (2, 5)]
+safes added: [(2, 2)]
+mines before: [(2, 0)]                                                                   mines after: [(2, 0), (2, 1)]                                                            mines added: [(2, 1)]                                                                    knowledge before:                                                                        {(2, 1)} = 1                                                                             {(0, 5), (1, 5)} = 1                                                                     {(2, 1), (2, 2)} = 1                                                                     {(3, 3), (3, 4), (3, 5), (1, 5)} = 1                                                     {(3, 2), (3, 3), (3, 4), (2, 2)} = 1
+knowledge after:
+{(0, 5), (1, 5)} = 1
+{(3, 2), (3, 3), (3, 4)} = 1
+{(3, 3), (3, 4), (3, 5), (1, 5)} = 1
+
+                                                                                         AI making safe move.                                                                     move: (2, 2)
