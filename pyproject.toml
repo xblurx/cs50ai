@@ -11,9 +11,11 @@ dependencies = [
     "check50>=3.3.11",
     "submit50>=3.2.0",
     "mypy>=1.14.1",
+    "numpy>=1.24.4",
+    "pandas>=2.3.1",
 ]
 readme = "README.md"
-requires-python = ">= 3.8"
+requires-python = ">= 3.12"
 
 [build-system]
 requires = ["hatchling"]
