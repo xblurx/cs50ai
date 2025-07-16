@@ -4,6 +4,8 @@ import math
 import sys
 from typing import TypedDict
 
+import pandas as pd
+
 PROBS = {
     # Unconditional probabilities for having gene
     "gene": {2: 0.01, 1: 0.03, 0: 0.96},
@@ -116,17 +118,24 @@ class Person(TypedDict):
     trait: bool
 
 
-def person_probability(
-    person: Name,
-    one_gene: set[Name],
-    two_genes: set[Name],
-    have_trait: set[Name],
-):
-    count = 1 if person in one_gene else 2 if person in two_genes else 0
-    gene = PROBS["gene"][count]
-    trait = person in have_trait or PROBS["trait"][count][person in have_trait]
+def inheritance_probability(row, df):
+    mother = df.loc[row["mother"]]
+    father = df.loc[row["father"]]
 
-    return gene * trait
+    def gene_pass_probability(parent):
+        count = parent["gene_count"]
+        return {0: PROBS["mutation"], 1: 0.5, 2: 1 - PROBS["mutation"]}[count]
+
+    m = gene_pass_probability(mother)
+    f = gene_pass_probability(father)
+
+    match row["gene_count"]:
+        case 2:
+            return m * f
+        case 1:
+            return m * (1 - f) + (1 - m) * f
+        case _:
+            return (1 - m) * (1 - f)
 
 
 def joint_probability(
@@ -148,40 +157,23 @@ def joint_probability(
         * everyone in set `have_trait` has the trait, and
         * everyone not in set` have_trait` does not have the trait.
     """
+    df = pd.DataFrame.from_dict(people, orient="index")
+    df["gene_count"] = df["name"].map(
+        lambda name: 1 if name in one_gene else 2 if name in two_genes else 0
+    )
+    df["has_trait"] = df["name"].map(lambda name: name in have_trait)
+    df["trait_probability"] = df.apply(
+        lambda row: PROBS["trait"][row["gene_count"]][row["has_trait"]], axis=1
+    )
+    df["gene_probability"] = df.apply(
+        lambda row: inheritance_probability(row, df)
+        if pd.notna(row["mother"])
+        else PROBS["gene"][row["gene_count"]],
+        axis=1,
+    )
+    df["joint_probability"] = df["gene_probability"] * df["trait_probability"]
 
-    def count(x: Name):
-        return 1 if x in one_gene else 2 if x in two_genes else 0
-
-    probs = []
-
-    for person in people:
-        mother, father = people[person]["mother"], people[person]["father"]
-
-        if not (mother and father):
-            i = count(person)
-            gene = PROBS["gene"][i]
-            trait = PROBS["trait"][i][person in have_trait]
-
-            probs.append(gene * trait)
-
-        else:
-            lookup = {0: PROBS["mutation"], 1: 0.5, 2: 1 - PROBS["mutation"]}
-
-            i = count(person)
-            m = count(mother)
-            f = count(father)
-            gene = (
-                lookup[m] * (1 - lookup[f]) + (1 - lookup[m]) * lookup[f]
-                if i == 1
-                else lookup[m] * lookup[f]
-                if i == 2
-                else (1 - lookup[m]) * (1 - lookup[f])
-            )
-            trait = PROBS["trait"][i][person in have_trait]
-
-            probs.append(gene * trait)
-
-    return math.prod(list(map(lambda p: round(p, 7), probs)))
+    return math.prod(df["joint_probability"])
 
 
 class Probability(TypedDict):
