@@ -1,14 +1,17 @@
-import csv
 import sys
+from functools import wraps
+from time import time
 
+import numpy as np
+import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 
 TEST_SIZE = 0.4
+COLUMNS = 17
 
 
 def main():
-
     # Check command-line arguments
     if len(sys.argv) != 2:
         sys.exit("Usage: python shopping.py data")
@@ -31,7 +34,35 @@ def main():
     print(f"True Negative Rate: {100 * specificity:.2f}%")
 
 
-def load_data(filename):
+def timing(f):
+    @wraps(f)
+    def wrap(*args, **kw):
+        ts = time()
+        result = f(*args, **kw)
+        te = time()
+        print("func:%r args:[%r, %r] took: %2.4f sec" % (f.__name__, args, kw, te - ts))
+        return result
+
+    return wrap
+
+
+MONTHS = {
+    "Jan": 0,
+    "Feb": 1,
+    "Mar": 2,
+    "Apr": 3,
+    "May": 4,
+    "June": 5,
+    "Jul": 6,
+    "Aug": 7,
+    "Sep": 8,
+    "Oct": 9,
+    "Nov": 10,
+    "Dec": 11,
+}
+
+
+def load_data(filename: str) -> tuple[np.ndarray, np.ndarray]:
     """
     Load shopping data from a CSV file `filename` and convert into a list of
     evidence lists and a list of labels. Return a tuple (evidence, labels).
@@ -59,18 +90,55 @@ def load_data(filename):
     labels should be the corresponding list of labels, where each label
     is 1 if Revenue is true, and 0 otherwise.
     """
-    raise NotImplementedError
+    df = pd.read_csv(
+        filename,
+        dtype={
+            "Administrative": np.int32,
+            "Administrative_Duration": np.float64,
+            "Informational": np.int32,
+            "Informational_Duration": np.float64,
+            "ProductRelated": np.int32,
+            "ProductRelated_Duration": np.float64,
+            "BounceRates": np.float64,
+            "ExitRates": np.float64,
+            "PageValues": np.float64,
+            "SpecialDay": np.float64,
+            "OperatingSystems": np.int32,
+            "Browser": np.int32,
+            "Region": np.int32,
+            "TrafficType": np.int32,
+        },
+    )
+    df["Month"] = df["Month"].map(lambda r: MONTHS[r])
+    df["VisitorType"] = (
+        df["VisitorType"]
+        .map(lambda r: 1 if r == "Returning_Visitor" else 0)
+        .astype(np.int32)
+    )
+    df["Weekend"] = df["Weekend"].astype(np.int32)
+    df["Revenue"] = df["Revenue"].astype(np.int32)
+
+    label = "Revenue"
+    evidence = df.drop(columns=label).to_numpy()
+    labels = df[label].to_numpy()
+
+    return (evidence, labels)
 
 
-def train_model(evidence, labels):
+def train_model(evidence: np.ndarray, labels: np.ndarray) -> KNeighborsClassifier:
     """
     Given a list of evidence lists and a list of labels, return a
     fitted k-nearest neighbor model (k=1) trained on the data.
     """
-    raise NotImplementedError
+    print("Learning...")
+    model = KNeighborsClassifier(n_neighbors=1)
+
+    model.fit(evidence, labels)
+
+    return model
 
 
-def evaluate(labels, predictions):
+def evaluate(labels: np.ndarray, predictions: np.ndarray) -> tuple[float, float]:
     """
     Given a list of actual labels and a list of predicted labels,
     return a tuple (sensitivity, specificity).
@@ -85,7 +153,22 @@ def evaluate(labels, predictions):
     representing the "true negative rate": the proportion of
     actual negative labels that were accurately identified.
     """
-    raise NotImplementedError
+    labels = np.array(labels)
+    predictions = np.array(predictions)
+
+    tp = np.sum((labels == 1) & (predictions == 1))
+    tn = np.sum((labels == 0) & (predictions == 0))
+
+    p = np.sum(labels == 1)
+    n = np.sum(labels == 0)
+
+    sensitivity = tp / p if p != 0 else 0.0
+    specificity = tn / n if n != 0 else 0.0
+
+    return (
+        sensitivity,
+        specificity,
+    )
 
 
 if __name__ == "__main__":
