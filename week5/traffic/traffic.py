@@ -10,7 +10,6 @@ EPOCHS = 6
 IMG_WIDTH = 30
 IMG_HEIGHT = 30
 NUM_CATEGORIES = 43
-# NUM_CATEGORIES = 3
 TEST_SIZE = 0.4
 
 
@@ -29,15 +28,26 @@ def main():
     # Split data into training and testing sets
     labels = tf.keras.utils.to_categorical(labels)
     x_train, x_test, y_train, y_test = train_test_split(
-        np.array(images), np.array(labels), test_size=TEST_SIZE, random_state=42
+        images,
+        labels,
+        test_size=TEST_SIZE,
+        random_state=42,
+        stratify=labels,
     )
 
     # Get a compiled neural network
     model = get_model()
 
+    callbacks = [
+        tf.keras.callbacks.EarlyStopping(
+            monitor="loss", patience=5, restore_best_weights=True
+        ),
+        tf.keras.callbacks.ModelCheckpoint("model.keras", save_best_only=True),
+    ]
+
     # Fit model on training data
     try:
-        model.fit(x_train, y_train, epochs=EPOCHS)
+        model.fit(x_train, y_train, epochs=EPOCHS, callbacks=callbacks)
     except KeyboardInterrupt:
         print("Interrupt")
         exit(0)
@@ -53,7 +63,7 @@ def main():
         print(f"Model saved to {filename}.")
 
 
-def load_data(data_dir: str) -> tuple[list[np.ndarray], list[int]] | None:
+def load_data(data_dir: str) -> tuple[np.ndarray, np.ndarray] | None:
     """
     Load image data from directory `data_dir`.
 
@@ -67,8 +77,8 @@ def load_data(data_dir: str) -> tuple[list[np.ndarray], list[int]] | None:
     be a list of integer labels, representing the categories for each of the
     corresponding `images`.
     """
-    images = []
-    labels = []
+    print("Loading data...")
+    images, labels = [], []
 
     for category in range(NUM_CATEGORIES):
         dir = os.path.join(data_dir, str(category))
@@ -98,6 +108,9 @@ def load_data(data_dir: str) -> tuple[list[np.ndarray], list[int]] | None:
 
     assert len(images) == len(labels)
 
+    images = np.array(images, dtype=np.float32) / 255.0
+    labels = np.array(labels, dtype=np.int32)
+
     return images, labels
 
 
@@ -110,11 +123,22 @@ def get_model():
     model = tf.keras.models.Sequential(
         [
             tf.keras.Input(shape=(IMG_WIDTH, IMG_HEIGHT, 3)),
-            tf.keras.layers.Conv2D(32, (3, 3), activation="relu"),
-            tf.keras.layers.MaxPooling2D(pool_size=(2, 2)),
+            tf.keras.layers.Conv2D(32, (3, 3), activation="relu", padding="same"),
+            tf.keras.layers.BatchNormalization(),
+            tf.keras.layers.Conv2D(32, (3, 3), activation="relu", padding="same"),
+            tf.keras.layers.BatchNormalization(),
+            tf.keras.layers.MaxPooling2D((2, 2)),
+            tf.keras.layers.Dropout(0.25),
+            tf.keras.layers.Conv2D(64, (3, 3), activation="relu", padding="same"),
+            tf.keras.layers.BatchNormalization(),
+            tf.keras.layers.Conv2D(64, (3, 3), activation="relu", padding="same"),
+            tf.keras.layers.BatchNormalization(),
+            tf.keras.layers.MaxPooling2D((2, 2)),
+            tf.keras.layers.Dropout(0.25),
             tf.keras.layers.Flatten(),
-            tf.keras.layers.Dense(128, activation="relu"),
-            tf.keras.layers.Dropout(0.2),
+            tf.keras.layers.Dense(256, activation="relu"),
+            tf.keras.layers.BatchNormalization(),
+            tf.keras.layers.Dropout(0.5),
             tf.keras.layers.Dense(NUM_CATEGORIES, activation="softmax"),
         ]
     )
