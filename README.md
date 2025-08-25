@@ -1,4 +1,4 @@
-# ai-cs50
+# cs50ai
 My work on CS50’s Introduction to AI with Python https://cs50.harvard.edu/ai/2024
 
 Topics described as weeks include:
